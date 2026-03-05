@@ -13,7 +13,7 @@ interface AuditEntry { id: number; time: string; type: string; status: string; d
 interface TagDef { id: number; name: string; color: string; is_preset: boolean; }
 
 export default function DashboardPage() {
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
   const [user, setUser] = useState<any>(null);
   const [trades, setTrades] = useState<Trade[]>([]);
   const [tagDefs, setTagDefs] = useState<TagDef[]>([]);
@@ -43,8 +43,9 @@ export default function DashboardPage() {
   // ── Load user + data on mount ─────────────────────────────────────
   useEffect(() => {
     (async () => {
+      try {
       const { data: { user: u } } = await supabase.auth.getUser();
-      if (!u) return;
+      if (!u) { setLoading(false); window.location.href = '/login'; return; }
       setUser(u);
 
       try {
@@ -81,6 +82,11 @@ export default function DashboardPage() {
         setDbStatus('error');
       }
       setLoading(false);
+      } catch (err) {
+        console.error('[dashboard] fatal error:', err);
+        setLoading(false);
+        window.location.href = '/login';
+      }
     })();
   }, [supabase]);
 
@@ -278,9 +284,27 @@ export default function DashboardPage() {
   const weeklyCols = ['account', 'weekStart', 'trades', 'pnlUSD', 'pnlGBP', 'commUSD', 'commGBP'];
   const weeklyLabels = ['Account', 'Week Start', 'Trades', 'P&L ($)', 'P&L (£)', 'Comm ($)', 'Comm (£)'];
 
+  const [loadingTimeout, setLoadingTimeout] = useState(false);
+  useEffect(() => {
+    if (!loading) return;
+    const t = setTimeout(() => setLoadingTimeout(true), 15000);
+    return () => clearTimeout(t);
+  }, [loading]);
+
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center" style={{ background: '#0a0d12' }}>
-      <span className="text-sm tracking-widest" style={{ color: '#64748b', fontFamily: 'var(--font-mono)' }}>CONNECTING TO DATABASE...</span>
+      <div className="text-center">
+        <span className="text-sm tracking-widest" style={{ color: '#64748b', fontFamily: 'var(--font-mono)' }}>CONNECTING TO DATABASE...</span>
+        {loadingTimeout && (
+          <div className="mt-6 flex flex-col items-center gap-3">
+            <span className="text-xs" style={{ color: '#ef4444' }}>Connection is taking too long.</span>
+            <div className="flex gap-3">
+              <button onClick={() => window.location.reload()} className="text-xs px-4 py-2 rounded" style={{ background: '#3b82f6', color: '#fff', border: 'none', cursor: 'pointer' }}>Retry</button>
+              <button onClick={() => { window.location.href = '/login'; }} className="text-xs px-4 py-2 rounded" style={{ background: 'transparent', color: '#ef4444', border: '1px solid rgba(239,68,68,0.3)', cursor: 'pointer' }}>Sign Out</button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 
