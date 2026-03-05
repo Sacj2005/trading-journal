@@ -10,10 +10,9 @@ interface Props {
 }
 
 function formatAI(text: string) {
-  // Simple bold parsing for **text**
-  return text.split(/(\*\*[^*]+\*\*)/g).map((part, i) => {
+  return text.split(/(\*\*[^*]+\*\*)/g).map((part) => {
     if (part.startsWith('**') && part.endsWith('**')) {
-      return `<strong style="color:#f0f0f0">${part.slice(2, -2)}</strong>`;
+      return `<strong style="color:#fafafa">${part.slice(2, -2)}</strong>`;
     }
     return part;
   }).join('');
@@ -30,18 +29,23 @@ const suggestions = [
 export default function ChatView({ messages, input, loading, onInput, onSend, stats }: Props) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 190px)', maxHeight: 700 }}>
-      <div style={{ flex: 1, overflowY: 'auto', padding: '14px 0', display: 'flex', flexDirection: 'column', gap: 10 }}>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '16px 0', display: 'flex', flexDirection: 'column', gap: 10 }}>
         {messages.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '40px 0' }}>
-            <div style={{ fontSize: 28, marginBottom: 12 }}>🧠</div>
-            <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 4, color: '#e2e8f0' }}>AI Trading Insights</div>
-            <div style={{ fontSize: 11, color: '#64748b', maxWidth: 400, margin: '0 auto', lineHeight: 1.6, marginBottom: 16 }}>
-              Ask Claude about your trading patterns, performance by setup, risk management, or anything about your journal data.
+          <div style={{ textAlign: 'center', padding: '50px 0' }}>
+            <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 6, color: '#eab308', textTransform: 'uppercase', letterSpacing: 1.5 }}>AI Trading Insights</div>
+            <div style={{ fontSize: 12, color: '#71717a', maxWidth: 420, margin: '0 auto', lineHeight: 1.7, marginBottom: 20 }}>
+              Ask about your trading patterns, performance by setup, risk management, or anything about your journal data.
             </div>
-            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
               {suggestions.map(s => (
                 <button key={s} onClick={() => { onInput(s); }}
-                  style={{ padding: '7px 12px', fontSize: 10, background: '#12161e', color: '#64748b', border: '1px solid #1c2230', borderRadius: 16, cursor: 'pointer', fontFamily: "'DM Sans', sans-serif" }}>
+                  style={{
+                    padding: '8px 14px', fontSize: 11, background: '#0f0f11', color: '#a1a1aa',
+                    border: '1px solid #1e1e22', borderRadius: 20, cursor: 'pointer',
+                    fontFamily: "'DM Sans', sans-serif", transition: 'all 0.15s',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = '#eab308'; e.currentTarget.style.color = '#eab308'; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = '#1e1e22'; e.currentTarget.style.color = '#a1a1aa'; }}>
                   {s}
                 </button>
               ))}
@@ -50,29 +54,34 @@ export default function ChatView({ messages, input, loading, onInput, onSend, st
         )}
         {messages.map((m, i) => (
           <div key={i} style={{
-            padding: '10px 14px', borderRadius: 8, maxWidth: '85%', fontSize: 12, lineHeight: 1.6, whiteSpace: 'pre-wrap',
+            padding: '12px 16px', borderRadius: 10, maxWidth: '85%', fontSize: 12, lineHeight: 1.7, whiteSpace: 'pre-wrap',
             alignSelf: m.role === 'user' ? 'flex-end' : 'flex-start',
-            background: m.role === 'user' ? '#3b82f6' : '#12161e',
-            border: m.role === 'user' ? 'none' : '1px solid #1c2230',
+            background: m.role === 'user' ? '#eab308' : '#0f0f11',
+            color: m.role === 'user' ? '#09090b' : '#a1a1aa',
+            border: m.role === 'user' ? 'none' : '1px solid #1e1e22',
+            fontWeight: m.role === 'user' ? 500 : 400,
           }} dangerouslySetInnerHTML={m.role === 'assistant' ? { __html: formatAI(m.text) } : undefined}>
             {m.role === 'user' ? m.text : undefined}
           </div>
         ))}
         {loading && (
-          <div style={{ alignSelf: 'flex-start', padding: '10px 14px', borderRadius: 8, background: '#12161e', border: '1px solid #1c2230', fontSize: 11, color: '#64748b' }}>
-            Thinking...
+          <div style={{
+            alignSelf: 'flex-start', padding: '12px 16px', borderRadius: 10,
+            background: '#0f0f11', border: '1px solid #1e1e22', fontSize: 11, color: '#71717a',
+          }}>
+            <span style={{ animation: 'pulse-glow 1.5s ease-in-out infinite' }}>Thinking...</span>
           </div>
         )}
       </div>
-      <div style={{ borderTop: '1px solid #1c2230', paddingTop: 10, display: 'flex', gap: 6 }}>
+      <div style={{ borderTop: '1px solid #1e1e22', paddingTop: 12, display: 'flex', gap: 8 }}>
         <input value={input} onChange={e => onInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && onSend()}
           placeholder="Ask about your trading..." style={{
-            flex: 1, padding: '9px 12px', fontSize: 12, background: '#12161e', color: '#e2e8f0',
-            border: '1px solid #1c2230', borderRadius: 6, fontFamily: "'DM Sans', sans-serif", outline: 'none',
+            flex: 1, padding: '11px 14px', fontSize: 12, background: '#0f0f11', color: '#fafafa',
+            border: '1px solid #1e1e22', borderRadius: 8, fontFamily: "'DM Sans', sans-serif", outline: 'none',
           }} />
         <button onClick={onSend} disabled={loading} style={{
-          padding: '9px 16px', fontSize: 12, fontWeight: 600, background: '#3b82f6', color: '#fff',
-          border: 'none', borderRadius: 6, cursor: 'pointer', opacity: loading ? 0.5 : 1,
+          padding: '11px 20px', fontSize: 12, fontWeight: 600, background: '#eab308', color: '#09090b',
+          border: 'none', borderRadius: 8, cursor: 'pointer', opacity: loading ? 0.5 : 1, transition: 'opacity 0.15s',
         }}>Send</button>
       </div>
     </div>

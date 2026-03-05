@@ -5,24 +5,26 @@ import { createClient } from '@/lib/supabase-browser';
 import { SECURITY_QUESTIONS } from '@/lib/auth-constants';
 
 const inputStyle: React.CSSProperties = {
-  background: '#0a0d12',
-  color: '#e2e8f0',
-  border: '1px solid #1c2230',
+  background: '#09090b',
+  color: '#fafafa',
+  border: '1px solid #1e1e22',
   borderRadius: 6,
-  padding: '10px 12px',
-  fontSize: 14,
+  padding: '11px 14px',
+  fontSize: 13,
   fontFamily: "'DM Sans', sans-serif",
   width: '100%',
   outline: 'none',
   boxSizing: 'border-box',
+  transition: 'border-color 0.15s',
 };
 
 const labelStyle: React.CSSProperties = {
   display: 'block',
-  fontSize: 13,
-  color: '#94a3b8',
+  fontSize: 12,
+  color: '#71717a',
   marginBottom: 6,
   fontFamily: "'DM Sans', sans-serif",
+  fontWeight: 500,
 };
 
 const GoogleIcon = () => (
@@ -111,7 +113,7 @@ export default function LoginPage() {
       if (signUpError) { setError(signUpError.message); return; }
 
       const userId = data.user?.id;
-      if (!userId) { setError('Sign-up failed — no user ID returned.'); return; }
+      if (!userId) { setError('Sign-up failed.'); return; }
 
       const res = await fetch('/api/auth/profile', {
         method: 'POST',
@@ -128,14 +130,8 @@ export default function LoginPage() {
       if (!profileData.success) { setError(profileData.error || 'Failed to save profile.'); return; }
 
       await supabase.auth.signOut();
-
-      setSuEmail('');
-      setSuPassword('');
-      setSuConfirm('');
-      setSuUsername('');
-      setSuQuestion(SECURITY_QUESTIONS[0]);
-      setSuAnswer('');
-
+      setSuEmail(''); setSuPassword(''); setSuConfirm(''); setSuUsername('');
+      setSuQuestion(SECURITY_QUESTIONS[0]); setSuAnswer('');
       setSignedUpSuccess(true);
       setTab('signin');
     } finally {
@@ -148,12 +144,12 @@ export default function LoginPage() {
       onClick={() => switchTab(t)}
       style={{
         flex: 1,
-        padding: '8px 0',
-        fontSize: 14,
+        padding: '9px 0',
+        fontSize: 13,
         fontFamily: "'DM Sans', sans-serif",
         fontWeight: tab === t ? 600 : 400,
-        color: tab === t ? '#e2e8f0' : '#64748b',
-        background: tab === t ? '#1c2230' : 'transparent',
+        color: tab === t ? '#fafafa' : '#52525b',
+        background: tab === t ? '#1e1e22' : 'transparent',
         border: 'none',
         borderRadius: 6,
         cursor: 'pointer',
@@ -164,203 +160,128 @@ export default function LoginPage() {
     </button>
   );
 
-  const divider = (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '16px 0' }}>
-      <div style={{ flex: 1, height: 1, background: '#1c2230' }} />
-      <span style={{ fontSize: 12, color: '#475569', fontFamily: "'DM Sans', sans-serif" }}>or</span>
-      <div style={{ flex: 1, height: 1, background: '#1c2230' }} />
-    </div>
-  );
-
   return (
-    <div className="min-h-screen flex items-center justify-center" style={{ background: '#0a0d12' }}>
+    <div className="min-h-screen flex items-center justify-center" style={{ background: '#09090b' }}>
       <div className="w-full max-w-md p-8">
+        {/* Logo */}
         <div className="text-center mb-10">
           <div className="inline-flex items-center gap-3 mb-4">
-            <div className="w-3 h-3 rounded-full" style={{ background: '#3b82f6', boxShadow: '0 0 12px #3b82f6' }} />
-            <h1 className="text-2xl font-bold tracking-tight" style={{ color: '#e2e8f0', fontFamily: "'DM Sans', sans-serif" }}>
-              TRADING JOURNAL
+            <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#eab308', boxShadow: '0 0 16px rgba(234,179,8,0.4)' }} />
+            <h1 style={{ fontSize: 22, fontWeight: 700, letterSpacing: 3, color: '#eab308', fontFamily: "'DM Sans', sans-serif" }}>
+              PNL VAULT
             </h1>
           </div>
-          <p className="text-sm" style={{ color: '#64748b' }}>
-            IBKR Trade Analytics · Supabase Powered
+          <p style={{ fontSize: 13, color: '#52525b' }}>
+            Professional Trading Analytics
           </p>
         </div>
 
-        <div className="rounded-xl p-8" style={{ background: '#12161e', border: '1px solid #1c2230' }}>
-          <div style={{ display: 'flex', background: '#0a0d12', borderRadius: 8, padding: 3, marginBottom: 24, border: '1px solid #1c2230' }}>
+        {/* Card */}
+        <div className="rounded-xl p-8" style={{ background: '#0f0f11', border: '1px solid #1e1e22' }}>
+          {/* Tab switcher */}
+          <div style={{ display: 'flex', background: '#09090b', borderRadius: 8, padding: 3, marginBottom: 24, border: '1px solid #1e1e22' }}>
             {tabBtn('signin', 'Sign In')}
             {tabBtn('signup', 'Sign Up')}
           </div>
 
           {signedUpSuccess && tab === 'signin' && (
             <div style={{
-              marginBottom: 16,
-              padding: '10px 12px',
-              background: 'rgba(34,197,94,0.1)',
-              border: '1px solid rgba(34,197,94,0.3)',
-              borderRadius: 6,
-              fontSize: 13,
-              color: '#86efac',
-              fontFamily: "'DM Sans', sans-serif",
+              marginBottom: 16, padding: '10px 14px',
+              background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.2)',
+              borderRadius: 6, fontSize: 13, color: '#86efac', fontFamily: "'DM Sans', sans-serif",
             }}>
               Account created successfully! Please sign in below.
             </div>
           )}
 
+          {/* Google button */}
           <button
             onClick={handleGoogleLogin}
-            className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-lg font-medium text-sm transition-all hover:brightness-110 cursor-pointer"
-            style={{ background: '#fff', color: '#1f2937', fontFamily: "'DM Sans', sans-serif" }}
+            className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-lg font-medium text-sm cursor-pointer"
+            style={{
+              background: '#fafafa', color: '#09090b', fontFamily: "'DM Sans', sans-serif",
+              border: 'none', borderRadius: 8, transition: 'opacity 0.15s',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.opacity = '0.9')}
+            onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
           >
             <GoogleIcon />
             Continue with Google
           </button>
 
-          {divider}
+          {/* Divider */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '18px 0' }}>
+            <div style={{ flex: 1, height: 1, background: '#1e1e22' }} />
+            <span style={{ fontSize: 11, color: '#52525b', fontFamily: "'DM Sans', sans-serif" }}>or</span>
+            <div style={{ flex: 1, height: 1, background: '#1e1e22' }} />
+          </div>
 
           {tab === 'signin' ? (
             <form onSubmit={handleSignIn} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
               <div>
                 <label style={labelStyle}>Email or Username</label>
-                <input
-                  type="text"
-                  required
-                  value={siIdentifier}
-                  onChange={e => setSiIdentifier(e.target.value)}
-                  style={inputStyle}
-                  placeholder="you@example.com or your username"
-                  autoComplete="username"
-                />
+                <input type="text" required value={siIdentifier} onChange={e => setSiIdentifier(e.target.value)}
+                  style={inputStyle} placeholder="you@example.com" autoComplete="username"
+                  onFocus={e => (e.target.style.borderColor = '#eab308')}
+                  onBlur={e => (e.target.style.borderColor = '#1e1e22')} />
               </div>
               <div>
                 <label style={labelStyle}>Password</label>
-                <input
-                  type="password"
-                  required
-                  value={siPassword}
-                  onChange={e => setSiPassword(e.target.value)}
-                  style={inputStyle}
-                  placeholder="Your password"
-                  autoComplete="current-password"
-                />
+                <input type="password" required value={siPassword} onChange={e => setSiPassword(e.target.value)}
+                  style={inputStyle} placeholder="Your password" autoComplete="current-password"
+                  onFocus={e => (e.target.style.borderColor = '#eab308')}
+                  onBlur={e => (e.target.style.borderColor = '#1e1e22')} />
                 <div style={{ textAlign: 'right', marginTop: 6 }}>
-                  <a href="/forgot-password" style={{ fontSize: 12, color: '#3b82f6', textDecoration: 'none', fontFamily: "'DM Sans', sans-serif" }}>
+                  <a href="/forgot-password" style={{ fontSize: 12, color: '#eab308', textDecoration: 'none', fontFamily: "'DM Sans', sans-serif" }}>
                     Forgot password?
                   </a>
                 </div>
               </div>
-              <button
-                type="submit"
-                disabled={loading}
-                style={{
-                  background: '#3b82f6',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: 6,
-                  padding: '11px 0',
-                  fontSize: 14,
-                  fontWeight: 600,
-                  fontFamily: "'DM Sans', sans-serif",
-                  cursor: loading ? 'not-allowed' : 'pointer',
-                  opacity: loading ? 0.7 : 1,
-                  marginTop: 4,
-                }}
-              >
+              <button type="submit" disabled={loading} style={{
+                background: '#eab308', color: '#09090b', border: 'none', borderRadius: 6,
+                padding: '12px 0', fontSize: 14, fontWeight: 600, fontFamily: "'DM Sans', sans-serif",
+                cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1, marginTop: 4,
+                transition: 'opacity 0.15s',
+              }}>
                 {loading ? 'Signing in...' : 'Sign In'}
               </button>
             </form>
           ) : (
             <form onSubmit={handleSignUp} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-              <div>
-                <label style={labelStyle}>Email</label>
-                <input
-                  type="email"
-                  required
-                  value={suEmail}
-                  onChange={e => setSuEmail(e.target.value)}
-                  style={inputStyle}
-                  placeholder="you@example.com"
-                  autoComplete="email"
-                />
-              </div>
-              <div>
-                <label style={labelStyle}>Username</label>
-                <input
-                  type="text"
-                  required
-                  value={suUsername}
-                  onChange={e => setSuUsername(e.target.value)}
-                  style={inputStyle}
-                  placeholder="Your display name"
-                  autoComplete="username"
-                />
-              </div>
-              <div>
-                <label style={labelStyle}>Password</label>
-                <input
-                  type="password"
-                  required
-                  value={suPassword}
-                  onChange={e => setSuPassword(e.target.value)}
-                  style={inputStyle}
-                  placeholder="Min. 8 characters"
-                  autoComplete="new-password"
-                />
-              </div>
-              <div>
-                <label style={labelStyle}>Confirm Password</label>
-                <input
-                  type="password"
-                  required
-                  value={suConfirm}
-                  onChange={e => setSuConfirm(e.target.value)}
-                  style={inputStyle}
-                  placeholder="Confirm password"
-                  autoComplete="new-password"
-                />
-              </div>
+              {[
+                { label: 'Email', type: 'email', value: suEmail, set: setSuEmail, ph: 'you@example.com', ac: 'email' },
+                { label: 'Username', type: 'text', value: suUsername, set: setSuUsername, ph: 'Your display name', ac: 'username' },
+                { label: 'Password', type: 'password', value: suPassword, set: setSuPassword, ph: 'Min. 8 characters', ac: 'new-password' },
+                { label: 'Confirm Password', type: 'password', value: suConfirm, set: setSuConfirm, ph: 'Confirm password', ac: 'new-password' },
+              ].map(f => (
+                <div key={f.label}>
+                  <label style={labelStyle}>{f.label}</label>
+                  <input type={f.type} required value={f.value} onChange={e => f.set(e.target.value)}
+                    style={inputStyle} placeholder={f.ph} autoComplete={f.ac}
+                    onFocus={e => (e.target.style.borderColor = '#eab308')}
+                    onBlur={e => (e.target.style.borderColor = '#1e1e22')} />
+                </div>
+              ))}
               <div>
                 <label style={labelStyle}>Security Question</label>
-                <select
-                  value={suQuestion}
-                  onChange={e => setSuQuestion(e.target.value as typeof suQuestion)}
-                  style={{ ...inputStyle, appearance: 'none' as React.CSSProperties['appearance'] }}
-                >
-                  {SECURITY_QUESTIONS.map(q => (
-                    <option key={q} value={q}>{q}</option>
-                  ))}
+                <select value={suQuestion} onChange={e => setSuQuestion(e.target.value as typeof suQuestion)}
+                  style={{ ...inputStyle, appearance: 'none' as React.CSSProperties['appearance'] }}>
+                  {SECURITY_QUESTIONS.map(q => <option key={q} value={q}>{q}</option>)}
                 </select>
               </div>
               <div>
                 <label style={labelStyle}>Security Answer</label>
-                <input
-                  type="text"
-                  required
-                  value={suAnswer}
-                  onChange={e => setSuAnswer(e.target.value)}
-                  style={inputStyle}
-                  placeholder="Your answer"
-                  autoComplete="off"
-                />
+                <input type="text" required value={suAnswer} onChange={e => setSuAnswer(e.target.value)}
+                  style={inputStyle} placeholder="Your answer" autoComplete="off"
+                  onFocus={e => (e.target.style.borderColor = '#eab308')}
+                  onBlur={e => (e.target.style.borderColor = '#1e1e22')} />
               </div>
-              <button
-                type="submit"
-                disabled={loading}
-                style={{
-                  background: '#3b82f6',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: 6,
-                  padding: '11px 0',
-                  fontSize: 14,
-                  fontWeight: 600,
-                  fontFamily: "'DM Sans', sans-serif",
-                  cursor: loading ? 'not-allowed' : 'pointer',
-                  opacity: loading ? 0.7 : 1,
-                  marginTop: 4,
-                }}
-              >
+              <button type="submit" disabled={loading} style={{
+                background: '#eab308', color: '#09090b', border: 'none', borderRadius: 6,
+                padding: '12px 0', fontSize: 14, fontWeight: 600, fontFamily: "'DM Sans', sans-serif",
+                cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1, marginTop: 4,
+                transition: 'opacity 0.15s',
+              }}>
                 {loading ? 'Creating account...' : 'Create Account'}
               </button>
             </form>
@@ -368,21 +289,16 @@ export default function LoginPage() {
 
           {error && (
             <div style={{
-              marginTop: 16,
-              padding: '10px 12px',
-              background: 'rgba(239,68,68,0.1)',
-              border: '1px solid rgba(239,68,68,0.3)',
-              borderRadius: 6,
-              fontSize: 13,
-              color: '#fca5a5',
-              fontFamily: "'DM Sans', sans-serif",
+              marginTop: 16, padding: '10px 14px',
+              background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)',
+              borderRadius: 6, fontSize: 13, color: '#fca5a5', fontFamily: "'DM Sans', sans-serif",
             }}>
               {error}
             </div>
           )}
         </div>
 
-        <p className="text-center text-xs mt-6" style={{ color: '#334155' }}>
+        <p className="text-center text-xs mt-6" style={{ color: '#27272a' }}>
           Your trades, market data, and insights are encrypted and private.
         </p>
       </div>

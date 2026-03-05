@@ -3,12 +3,12 @@
 import { useState } from 'react';
 
 const inputStyle: React.CSSProperties = {
-  background: '#0a0d12',
-  color: '#e2e8f0',
-  border: '1px solid #1c2230',
+  background: '#09090b',
+  color: '#fafafa',
+  border: '1px solid #1e1e22',
   borderRadius: 6,
-  padding: '10px 12px',
-  fontSize: 14,
+  padding: '11px 14px',
+  fontSize: 13,
   fontFamily: "'DM Sans', sans-serif",
   width: '100%',
   outline: 'none',
@@ -17,10 +17,11 @@ const inputStyle: React.CSSProperties = {
 
 const labelStyle: React.CSSProperties = {
   display: 'block',
-  fontSize: 13,
-  color: '#94a3b8',
+  fontSize: 12,
+  color: '#71717a',
   marginBottom: 6,
   fontFamily: "'DM Sans', sans-serif",
+  fontWeight: 500,
 };
 
 type Step = 1 | 2 | 3;
@@ -102,7 +103,7 @@ export default function ForgotPasswordPage() {
           <p className="text-sm" style={{ color: '#64748b' }}>Password Recovery</p>
         </div>
 
-        <div className="rounded-xl p-8" style={{ background: '#12161e', border: '1px solid #1c2230' }}>
+        <div className="rounded-xl p-8" style={{ background: '#0f0f11', border: '1px solid #1e1e22' }}>
           {step === 1 && (
             <>
               <h2 className="text-lg font-semibold mb-2" style={{ color: '#e2e8f0', fontFamily: "'DM Sans', sans-serif" }}>
@@ -128,8 +129,8 @@ export default function ForgotPasswordPage() {
                   type="submit"
                   disabled={loading}
                   style={{
-                    background: '#3b82f6',
-                    color: '#fff',
+                    background: '#eab308',
+                    color: '#09090b',
                     border: 'none',
                     borderRadius: 6,
                     padding: '11px 0',
@@ -160,7 +161,7 @@ export default function ForgotPasswordPage() {
                   display: 'block',
                   marginTop: 20,
                   textAlign: 'center',
-                  color: '#3b82f6',
+                  color: '#eab308',
                   fontSize: 14,
                   fontFamily: "'DM Sans', sans-serif",
                   textDecoration: 'none',
@@ -184,11 +185,11 @@ export default function ForgotPasswordPage() {
                   <label style={labelStyle}>Question</label>
                   <p style={{
                     padding: '10px 12px',
-                    background: '#0a0d12',
-                    border: '1px solid #1c2230',
+                    background: '#09090b',
+                    border: '1px solid #1e1e22',
                     borderRadius: 6,
                     fontSize: 14,
-                    color: '#e2e8f0',
+                    color: '#fafafa',
                     fontFamily: "'DM Sans', sans-serif",
                     margin: 0,
                   }}>
@@ -211,8 +212,8 @@ export default function ForgotPasswordPage() {
                   type="submit"
                   disabled={loading}
                   style={{
-                    background: '#3b82f6',
-                    color: '#fff',
+                    background: '#eab308',
+                    color: '#09090b',
                     border: 'none',
                     borderRadius: 6,
                     padding: '11px 0',
@@ -239,7 +240,7 @@ export default function ForgotPasswordPage() {
               <a
                 href="/login"
                 style={{
-                  color: '#3b82f6',
+                  color: '#eab308',
                   fontSize: 14,
                   fontFamily: "'DM Sans', sans-serif",
                   textDecoration: 'none',

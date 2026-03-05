@@ -4,12 +4,12 @@ import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase-browser';
 
 const inputStyle: React.CSSProperties = {
-  background: '#0a0d12',
-  color: '#e2e8f0',
-  border: '1px solid #1c2230',
+  background: '#09090b',
+  color: '#fafafa',
+  border: '1px solid #1e1e22',
   borderRadius: 6,
-  padding: '10px 12px',
-  fontSize: 14,
+  padding: '11px 14px',
+  fontSize: 13,
   fontFamily: "'DM Sans', sans-serif",
   width: '100%',
   outline: 'none',
@@ -18,10 +18,11 @@ const inputStyle: React.CSSProperties = {
 
 const labelStyle: React.CSSProperties = {
   display: 'block',
-  fontSize: 13,
-  color: '#94a3b8',
+  fontSize: 12,
+  color: '#71717a',
   marginBottom: 6,
   fontFamily: "'DM Sans', sans-serif",
+  fontWeight: 500,
 };
 
 export default function ResetPasswordPage() {
@@ -84,38 +85,38 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center" style={{ background: '#0a0d12' }}>
+    <div className="min-h-screen flex items-center justify-center" style={{ background: '#09090b' }}>
       <div className="w-full max-w-md p-8">
         <div className="text-center mb-10">
           <div className="inline-flex items-center gap-3 mb-4">
-            <div className="w-3 h-3 rounded-full" style={{ background: '#3b82f6', boxShadow: '0 0 12px #3b82f6' }} />
-            <h1 className="text-2xl font-bold tracking-tight" style={{ color: '#e2e8f0', fontFamily: "'DM Sans', sans-serif" }}>
+            <div className="w-3 h-3 rounded-full" style={{ background: '#eab308', boxShadow: '0 0 12px #3b82f6' }} />
+            <h1 className="text-2xl font-bold tracking-tight" style={{ color: '#fafafa', fontFamily: "'DM Sans', sans-serif" }}>
               TRADING JOURNAL
             </h1>
           </div>
-          <p className="text-sm" style={{ color: '#64748b' }}>Set New Password</p>
+          <p className="text-sm" style={{ color: '#52525b' }}>Set New Password</p>
         </div>
 
-        <div className="rounded-xl p-8" style={{ background: '#12161e', border: '1px solid #1c2230' }}>
+        <div className="rounded-xl p-8" style={{ background: '#0f0f11', border: '1px solid #1e1e22' }}>
           {!ready && !invalid && (
-            <div style={{ textAlign: 'center', color: '#64748b', fontSize: 14, fontFamily: "'DM Sans', sans-serif" }}>
+            <div style={{ textAlign: 'center', color: '#52525b', fontSize: 14, fontFamily: "'DM Sans', sans-serif" }}>
               Verifying reset link...
             </div>
           )}
 
           {invalid && !ready && (
             <>
-              <h2 className="text-lg font-semibold mb-3" style={{ color: '#e2e8f0', fontFamily: "'DM Sans', sans-serif" }}>
+              <h2 className="text-lg font-semibold mb-3" style={{ color: '#fafafa', fontFamily: "'DM Sans', sans-serif" }}>
                 Invalid or Expired Link
               </h2>
-              <p style={{ color: '#94a3b8', fontSize: 14, fontFamily: "'DM Sans', sans-serif", lineHeight: 1.6, marginBottom: 20 }}>
+              <p style={{ color: '#71717a', fontSize: 14, fontFamily: "'DM Sans', sans-serif", lineHeight: 1.6, marginBottom: 20 }}>
                 This password reset link is invalid or has expired. Please request a new one.
               </p>
               <a
                 href="/forgot-password"
                 style={{
                   display: 'inline-block',
-                  color: '#3b82f6',
+                  color: '#eab308',
                   fontSize: 14,
                   fontFamily: "'DM Sans', sans-serif",
                   textDecoration: 'none',
@@ -128,10 +129,10 @@ export default function ResetPasswordPage() {
 
           {ready && !success && (
             <>
-              <h2 className="text-lg font-semibold mb-2" style={{ color: '#e2e8f0', fontFamily: "'DM Sans', sans-serif" }}>
+              <h2 className="text-lg font-semibold mb-2" style={{ color: '#fafafa', fontFamily: "'DM Sans', sans-serif" }}>
                 Set New Password
               </h2>
-              <p className="text-sm mb-6" style={{ color: '#64748b', fontFamily: "'DM Sans', sans-serif" }}>
+              <p className="text-sm mb-6" style={{ color: '#52525b', fontFamily: "'DM Sans', sans-serif" }}>
                 Choose a new password for your account.
               </p>
               <form onSubmit={handleReset} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -163,8 +164,8 @@ export default function ResetPasswordPage() {
                   type="submit"
                   disabled={loading}
                   style={{
-                    background: '#3b82f6',
-                    color: '#fff',
+                    background: '#eab308',
+                    color: '#09090b',
                     border: 'none',
                     borderRadius: 6,
                     padding: '11px 0',
@@ -201,7 +202,7 @@ export default function ResetPasswordPage() {
               <h2 className="text-lg font-semibold mb-3" style={{ color: '#22c55e', fontFamily: "'DM Sans', sans-serif" }}>
                 Password Updated!
               </h2>
-              <p style={{ color: '#94a3b8', fontSize: 14, fontFamily: "'DM Sans', sans-serif" }}>
+              <p style={{ color: '#71717a', fontSize: 14, fontFamily: "'DM Sans', sans-serif" }}>
                 Redirecting to your dashboard...
               </p>
             </div>
